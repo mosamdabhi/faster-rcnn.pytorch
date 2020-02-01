@@ -22,7 +22,7 @@ def prepare_roidb(imdb):
   if not (imdb.name.startswith('coco')):
     sizes = [PIL.Image.open(imdb.image_path_at(i)).size
          for i in range(imdb.num_images)]
-         
+
   for i in range(len(imdb.image_index)):
     roidb[i]['img_id'] = imdb.image_id_at(i)
     roidb[i]['image'] = imdb.image_path_at(i)
@@ -115,7 +115,7 @@ def combined_roidb(imdb_names, training=True):
 
   roidbs = [get_roidb(s) for s in imdb_names.split('+')]
   roidb = roidbs[0]
-
+  #print(roidb[0])
   if len(roidbs) > 1:
     for r in roidbs[1:]:
       roidb.extend(r)

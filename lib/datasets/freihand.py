@@ -20,7 +20,7 @@ import pickle
 from .imdb import imdb
 from .imdb import ROOT_DIR
 from . import ds_utils
-#from .freihand_eval import freihand_eval
+from .freihand_eval import freihand_eval
 
 # TODO: make fast_rcnn irrelevant
 # >>>> obsolete, because it depends on sth outside of this project
@@ -98,7 +98,6 @@ class freihand(imdb):
         Construct an image path from the image's "index" identifier.
         """
         image_path = self.data_dict[index]['img_path']
-        print(index)
         assert os.path.exists(image_path), \
             'Path does not exist: {}'.format(image_path)
         return image_path
@@ -314,7 +313,7 @@ class freihand(imdb):
         cachedir = os.path.join(self.freihand_path, 'annotations_cache')
         aps = []
         # The PASCAL VOC metric changed in 2010
-        use_07_metric = True if int(self._year) < 2010 else False
+        use_07_metric = True #if int(self._year) < 2010 else False
         print('VOC07 metric? ' + ('Yes' if use_07_metric else 'No'))
         if not os.path.isdir(output_dir):
             os.mkdir(output_dir)
@@ -343,21 +342,6 @@ class freihand(imdb):
         print('Recompute with `./tools/reval.py --matlab ...` for your paper.')
         print('-- Thanks, The Management')
         print('--------------------------------------------------------------')
-
-    def _do_matlab_eval(self, output_dir='output'):
-        print('-----------------------------------------------------')
-        print('Computing results with the official MATLAB eval code.')
-        print('-----------------------------------------------------')
-        path = os.path.join(cfg.ROOT_DIR, 'lib', 'datasets',
-                            'VOCdevkit-matlab-wrapper')
-        cmd = 'cd {} && '.format(path)
-        cmd += '{:s} -nodisplay -nodesktop '.format(cfg.MATLAB)
-        cmd += '-r "dbstop if error; '
-        cmd += 'voc_eval(\'{:s}\',\'{:s}\',\'{:s}\',\'{:s}\'); quit;"' \
-            .format(self._devkit_path, self._get_comp_id(),
-                    self._image_set, output_dir)
-        print('Running:\n{}'.format(cmd))
-        status = subprocess.call(cmd, shell=True)
 
     def evaluate_detections(self, all_boxes, output_dir):
         self._write_freihand_results_file(all_boxes)

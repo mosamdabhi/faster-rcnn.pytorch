@@ -17,7 +17,7 @@ import pdb
 import time
 
 import cv2
-
+import random
 import torch
 from torch.autograd import Variable
 import torch.nn as nn
@@ -151,7 +151,7 @@ if __name__ == '__main__':
     raise Exception('There is no input directory for loading network from ' + input_dir)
   load_name = os.path.join(input_dir,
     'faster_rcnn_{}_{}_{}.pth'.format(args.checksession, args.checkepoch, args.checkpoint))
-
+  
   # initilize the network here.
   if args.net == 'vgg16':
     fasterRCNN = vgg16(imdb.classes, pretrained=False, class_agnostic=args.class_agnostic)
@@ -166,7 +166,6 @@ if __name__ == '__main__':
     pdb.set_trace()
 
   fasterRCNN.create_architecture()
-
   print("load checkpoint %s" % (load_name))
   checkpoint = torch.load(load_name)
   fasterRCNN.load_state_dict(checkpoint['model'])
@@ -204,12 +203,12 @@ if __name__ == '__main__':
   max_per_image = 100
 
   vis = args.vis
-
+  #vis = True
   if vis:
     thresh = 0.05
   else:
     thresh = 0.0
-
+  #thresh = 0.5
   save_name = 'faster_rcnn_10'
   num_images = len(imdb.image_index)
   all_boxes = [[[] for _ in xrange(num_images)]
@@ -315,10 +314,12 @@ if __name__ == '__main__':
       sys.stdout.write('im_detect: {:d}/{:d} {:.3f}s {:.3f}s   \r' \
           .format(i + 1, num_images, detect_time, nms_time))
       sys.stdout.flush()
-
       if vis:
-          cv2.imwrite('result.png', im2show)
-          pdb.set_trace()
+          pass
+          #nn = str(random.randint(2001,3000))
+          #cv2.imwrite('/home/mqadri/faster-rcnn.pytorch/tests/{}.jpg'.format(nn), im2show)
+          #sys.exit()
+          #pdb.set_trace()
           #cv2.imshow('test', im2show)
           #cv2.waitKey(0)
 

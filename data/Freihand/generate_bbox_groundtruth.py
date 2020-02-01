@@ -125,13 +125,13 @@ def find_bb(uv, joint_vis, aspect_ratio=1.0):
 #===============================================================================
     #w = np.clip(w, 0, cfg.patch_width)
     #h = np.clip(h, 0, cfg.patch_height)
-    #bbox = [center_x, center_y, w, h]
-    bbox = [x1, y1, x2, y2]
-    print(bbox)
+    bbox = [center_x, center_y, w, h]
+    #bbox = [x1, y1, x2, y2]
+    #print(bbox)
     return bbox
 
 if __name__ == "__main__":
-    data_split = "testing"
+    data_split = "training"
     f = FreiHand(data_split)
     f.data_dir = "/home/mqadri/hand-integral-pose-estimation/data/FreiHand"
     data = f.load_data()
@@ -145,8 +145,6 @@ if __name__ == "__main__":
         dir_name = data_split
     for d in data:
         i += 1
-        if i > 2:
-            break
         joint_cam = d["joint_cam"]
         K = d['K']
         joint_vis = np.ones(joint_cam.shape, dtype=np.float)
@@ -159,55 +157,52 @@ if __name__ == "__main__":
             'class': 'hand'
         }
         bboxes.append(bbox_info)
-        im_in = np.array(imread(bbox_info["img_path"]))
-        if len(im_in.shape) == 2:
-            im_in = im_in[:,:,np.newaxis]
-            im_in = np.concatenate((im_in,im_in,im_in), axis=2)
-        # rgb -> bgr
-        im = im_in[:,:,::-1]
-        cvimg = cv2.imread(bbox_info["img_path"], cv2.IMREAD_COLOR | cv2.IMREAD_IGNORE_ORIENTATION)
-        joint_cam = d['joint_cam']
-        K = d['K']
-        
-        fig = plt.figure()
-        ax1 = fig.add_subplot(121)
-        #            
-        #     ax1 = fig.add_subplot(121)
-        ax2 = fig.add_subplot(122)
-        #     # 
-        #     ax1.imshow((255*img_patch/np.max(img_patch)).astype(np.uint8))
-        ax1.imshow(cvimg)
-        #     #ax1.imshow(img2_w)
-        #     # 
-        uv, _, _ = augment.projectPoints(joint_cam, np.eye(3), K)
-        f.plot_hand(ax1, uv, order='uv')
-        #ax1.imshow(cvimg)
-        #     FreiHand.plot_hand(ax2, joint_img_orig[:, 0:2], order='uv')
-        #     ax1.axis('off')
-        nn = str(random.randint(1,999))
-        #     #print("=============================================================")
-        #     #print(nn)
-                          
-
-
-     
-        pascal_classes = ["hand"]
-        bbox = bbox_info["bbox"]
-        bbox = np.array(bbox)
-        bbox = np.expand_dims(bbox, 0)
-        #bbox = xywh_to_xyxy(bbox)
-        ones = np.ones(bbox.shape[0])
-        ones = np.expand_dims(ones, 0)
-        bbox = np.hstack((bbox, ones))
-        #for i in range(bbox.shape[0]):
-        #   print(type(bbox[i]))
-        #   bbox[i].append(1) 
-        im2show = vis_detections(im, pascal_classes[0], bbox, 0.5)
-        im2showRGB = cv2.cvtColor(im2show, cv2.COLOR_BGR2RGB)
-        print(type(im2showRGB))
-        peo = im2showRGB.get().astype('f')
-        ax2.imshow((255*peo/np.max(peo)).astype(np.uint8))
-        plt.savefig('/home/mqadri/faster-rcnn.pytorch/tests/{}.jpg'.format(nn))
+        #=======================================================================
+        # im_in = np.array(imread(bbox_info["img_path"]))
+        # if len(im_in.shape) == 2:
+        #     im_in = im_in[:,:,np.newaxis]
+        #     im_in = np.concatenate((im_in,im_in,im_in), axis=2)
+        # # rgb -> bgr
+        # im = im_in[:,:,::-1]
+        # cvimg = cv2.imread(bbox_info["img_path"], cv2.IMREAD_COLOR | cv2.IMREAD_IGNORE_ORIENTATION)
+        # joint_cam = d['joint_cam']
+        # K = d['K']
+        # 
+        # fig = plt.figure()
+        # ax1 = fig.add_subplot(121)
+        # #            
+        # #     ax1 = fig.add_subplot(121)
+        # ax2 = fig.add_subplot(122)
+        # #     # 
+        # #     ax1.imshow((255*img_patch/np.max(img_patch)).astype(np.uint8))
+        # ax1.imshow(cvimg)
+        # #     #ax1.imshow(img2_w)
+        # #     # 
+        # uv, _, _ = augment.projectPoints(joint_cam, np.eye(3), K)
+        # f.plot_hand(ax1, uv, order='uv')
+        # #ax1.imshow(cvimg)
+        # #     FreiHand.plot_hand(ax2, joint_img_orig[:, 0:2], order='uv')
+        # #     ax1.axis('off')
+        # nn = str(random.randint(1,999))
+        # pascal_classes = ["hand"]
+        # bbox = bbox_info["bbox"]
+        # bbox = np.array(bbox)
+        # bbox = np.expand_dims(bbox, 0)
+        # #bbox = xywh_to_xyxy(bbox)
+        # ones = np.ones(bbox.shape[0])
+        # ones = np.expand_dims(ones, 0)
+        # bbox = np.hstack((bbox, ones))
+        # #for i in range(bbox.shape[0]):
+        # #   print(type(bbox[i]))
+        # #   bbox[i].append(1) 
+        # im2show = vis_detections(im, pascal_classes[0], bbox, 0.5)
+        # im2showRGB = cv2.cvtColor(im2show, cv2.COLOR_BGR2RGB)
+        # print(type(im2showRGB))
+        # peo = im2showRGB.get().astype('f')
+        # ax2.imshow((255*peo/np.max(peo)).astype(np.uint8))
+        # plt.savefig('/home/mqadri/faster-rcnn.pytorch/tests/{}.jpg'.format(nn))
+        # plt.close()
+        #=======================================================================
         #nn = str(random.randint(1000,2000))
         #cv2.imwrite('/home/mqadri/faster-rcnn.pytorch/tests/{}.jpg'.format(nn), im2showRGB)
         

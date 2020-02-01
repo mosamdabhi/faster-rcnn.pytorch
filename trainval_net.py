@@ -148,7 +148,6 @@ class sampler(Sampler):
 if __name__ == '__main__':
 
   args = parse_args()
-
   print('Called with args:')
   print(args)
 
@@ -290,7 +289,7 @@ if __name__ == '__main__':
     if 'pooling_mode' in checkpoint.keys():
       cfg.POOLING_MODE = checkpoint['pooling_mode']
     print("loaded checkpoint %s" % (load_name))
-
+  
   if args.mGPUs:
     fasterRCNN = nn.DataParallel(fasterRCNN)
 

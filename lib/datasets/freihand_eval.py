@@ -31,8 +31,8 @@ def parse_rec(filename):
   return objects
 
 
-def voc_ap(rec, prec, use_07_metric=False):
-  """ ap = voc_ap(rec, prec, [use_07_metric])
+def freihand_ap(rec, prec, use_07_metric=False):
+  """ ap = freihand_ap(rec, prec, [use_07_metric])
   Compute VOC AP given precision and recall.
   If use_07_metric is true, uses the
   VOC 07 11 point method (default:False).
@@ -65,7 +65,7 @@ def voc_ap(rec, prec, use_07_metric=False):
   return ap
 
 
-def voc_eval(detpath,
+def freihand_eval(detpath,
              annopath,
              imagesetfile,
              classname,
